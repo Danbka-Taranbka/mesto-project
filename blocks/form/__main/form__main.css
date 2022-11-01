@@ -1,0 +1,23 @@
+.form__main {
+  width: 100%;
+  min-width: 282px;
+  max-width: 430px;
+  min-height: 322px;
+  max-height: 330px;
+  
+  background-color: white;
+  border-radius: 10px;
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+
+@media screen and (max-width: 340px) {
+  .form__main {
+    max-width: 282px;
+  }
+}
