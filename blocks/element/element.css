@@ -1,8 +1,10 @@
 .element {
   object-fit: contain;
+  object-position: center;
+
   border-radius: 10px;
   background-color: white;
-  
+
   display: flex;
   flex-direction: column;
   align-items: center;

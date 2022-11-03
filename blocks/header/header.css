@@ -2,13 +2,13 @@
   width: 85%;
   max-width: 880px;
   min-width: 288px;
-  
+
   margin-top: 45px;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  
-  border-bottom: solid 1px #545454;
+
+  border-bottom: solid 1px rgba(84, 84, 84, 0.7);
 }
 
 @media screen and (max-width: 320px) {

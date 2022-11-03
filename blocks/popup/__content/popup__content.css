@@ -1,23 +1,21 @@
-.form__main {
-  width: 100%;
+.popup__content {
+  width: 85%;
   min-width: 282px;
   max-width: 430px;
-  min-height: 322px;
-  max-height: 330px;
-  
+
   background-color: white;
   border-radius: 10px;
-  
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+
+  position: relative;
   z-index: 2;
 }
 
-
-@media screen and (max-width: 340px) {
-  .form__main {
+@media screen and (max-width: 320px) {
+  .popup__content {
     max-width: 282px;
   }
 }

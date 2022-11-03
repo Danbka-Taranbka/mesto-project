@@ -2,10 +2,10 @@
   width: 85%;
   max-width: 880px;
   min-width: 282px;
-  
-  margin-top: 60px;
+
+  margin-top: 66px;
   margin-bottom: 60px;
- 
+
   display: flex;
   justify-items: flex-start;
 }

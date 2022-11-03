@@ -1,14 +1,13 @@
-.form__heading {
+.popup__heading {
   margin: 0;
   padding: 0;
 
   margin-top: 34px;
-  margin-bottom: 54px;
-  
+
   width: 90%;
   min-width: 238px;
   max-width: 358px;
-  
+
   color: black;
   font-family: 'Inter', Arial, sans-serif;
   font-weight: 900;
@@ -16,8 +15,9 @@
   line-height: 1.21;
 }
 
-@media screen and (max-width: 400px) {
-  .form__heading {
+@media screen and (max-width: 401px) {
+  .popup__heading {
+    margin-top: 25px;
     font-size: 18px;
     line-height: 1.21;
     text-align: center;

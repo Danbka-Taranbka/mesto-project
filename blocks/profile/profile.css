@@ -1,10 +1,10 @@
 .profile {
-  width: 90%;
+  width: 100%;
   max-width: 880px;
   min-width: 282px;
- 
-  margin-top: 36.25px;
-  
+
+  margin-top: 40px;
+
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -19,7 +19,6 @@
 
 @media screen and (max-width: 320px) {
   .profile {
-    margin-top: 38.25px;
+    margin-top: 42px;
   }
 }
-

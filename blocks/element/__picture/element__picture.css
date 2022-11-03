@@ -1,8 +1,11 @@
 .element__picture {
   width: 100%;
   min-width: 282px;
-  
+
   min-height: 282px;
-  
+
   border-radius: 10px 10px 0 0;
+
+  object-fit: contain;
+  object-position: center;
 }
