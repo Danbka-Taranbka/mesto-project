@@ -21,4 +21,4 @@
 
 
 Ссылка на опубликованный сайт: 
-https://danbka-taranbka.github.io/mesto-project/
+https://danbka-taranbka.github.io/mesto-project/index.html 

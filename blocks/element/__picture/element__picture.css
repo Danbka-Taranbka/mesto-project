@@ -2,10 +2,10 @@
   width: 100%;
   min-width: 282px;
 
-  min-height: 282px;
+  height: 282px;
 
   border-radius: 10px 10px 0 0;
 
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
 }
