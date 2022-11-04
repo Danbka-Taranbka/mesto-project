@@ -2,24 +2,17 @@
   margin: 0;
   padding: 0;
 
-  margin-top: 34px;
-
-  width: 90%;
-  min-width: 238px;
-  max-width: 358px;
-
   color: black;
   font-family: 'Inter', Arial, sans-serif;
   font-weight: 900;
   font-size: 24px;
   line-height: 1.21;
+  align-self: flex-start;
 }
 
 @media screen and (max-width: 401px) {
   .popup__heading {
-    margin-top: 25px;
     font-size: 18px;
-    line-height: 1.21;
     text-align: center;
   }
 }

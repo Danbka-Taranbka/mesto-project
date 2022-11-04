@@ -20,8 +20,8 @@
   z-index: 3;
 
   position: absolute;
-  bottom: 340px;
-  left: 440px;
+  top: -40px;
+  right: -40px;
 }
 
 
@@ -31,8 +31,7 @@
 
 @media screen and (max-width: 540px) {
   .popup__close-button {
-    left: calc(100% - 31px);
-    bottom: 338px;
+    right: 0;
   }
 }
 
@@ -44,7 +43,6 @@
     background-image: url(../../../images/close-icon_small.svg);
     background-color: transparent;
 
-    left: calc(100% - 20px);
-    bottom: 339px;
+    top: -36px;
   }
 }
