@@ -4,7 +4,9 @@
   padding: 34px 36px 37px 36px;
 
   width: 100%;
-  max-width: 360px;
+  max-width: 430px;
+  
+  box-sizing: border-box;
   
   background-color: white;
   border-radius: 10px;
@@ -22,7 +24,7 @@
 
 @media screen and (max-width: 435px) {
   .popup__content {
-    padding: 25px 22px 25px 25px;
-    max-width: 233px;
+    padding: 25px 20px 25px 20px;
+    max-width: 282px;
   }
 }
