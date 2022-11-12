@@ -18,7 +18,3 @@
 .element__like-button:hover {
   opacity: 0.5;
 }
-
-.element__like-button:focus {
-  background-image: url(../../../images/like-icon-enabled.svg);
-}
