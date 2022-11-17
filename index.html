@@ -33,48 +33,18 @@
     </section>
 
     <section class="elements">
-      <div class="element">
-        <img class="element__picture" src="./images/image-karachaevsk.jpg" alt="Карачаевск">
-        <div class="element__description">
-          <h2 class="element__title">Карачаевск</h2>
-          <button type="button" class="element__like-button button"></button>
+      <!--Шаблон карточки без заполненных данных (картинка и название) 
+        с готовой HTML-разметкой.-->
+      <template id="element-template">
+        <div class="element">
+          <img class="element__picture" src="" alt="">
+          <div class="element__description">
+            <h2 class="element__title"></h2>
+            <button type="button" class="element__like-button button"></button>
+          </div>
         </div>
-      </div>
-      <div class="element">
-        <img class="element__picture" src="./images/image-elbrus.jpg" alt="Гора Эльбрус">
-        <div class="element__description">
-          <h2 class="element__title">Гора Эльбрус</h2>
-          <button type="button" class="element__like-button button"></button>
-        </div>
-      </div>
-      <div class="element">
-        <img class="element__picture" src="./images/image-dombay.jpg" alt="Домбай">
-        <div class="element__description">
-          <h2 class="element__title">Домбай</h2>
-          <button type="button" class="element__like-button button"></button>
-        </div>
-      </div>
-      <div class="element">
-        <img class="element__picture" src="./images/image-elbrus.jpg" alt="Эльбрус">
-        <div class="element__description">
-          <h2 class="element__title">Гора Эльбрус</h2>
-          <button type="button" class="element__like-button button"></button>
-        </div>
-      </div>
-      <div class="element">
-        <img class="element__picture" src="./images/image-dombay.jpg" alt="Гора Домбай">
-        <div class="element__description">
-          <h2 class="element__title">Домбай</h2>
-          <button type="button" class="element__like-button button"></button>
-        </div>
-      </div>
-      <div class="element">
-        <img class="element__picture" src="./images/image-karachaevsk.jpg" alt="Карачаево-Черкессия">
-        <div class="element__description">
-          <h2 class="element__title">Карачаево-Черкессия</h2>
-          <button type="button" class="element__like-button button"></button>
-        </div>
-      </div>
+      </template>
+    
     </section>
 
   </main>
@@ -94,7 +64,6 @@
       </form>
     </div>
   </section>
-  
   <script src="./script.js"></script>
 </body>
 

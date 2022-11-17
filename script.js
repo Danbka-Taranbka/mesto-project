@@ -1,25 +1,49 @@
 /*Задаю переменные*/
-let likeButton = document.querySelector('.element__like-button');
-let likeButtons = document.querySelectorAll('.element__like-button');
+const elements = document.querySelector('.elements');
 
-let profileEditButton = document.querySelector('.profile .profile__main .profile__info .profile__edit-button');
-let profileName = document.querySelector('.profile .profile__main .profile__info .profile__name');
-let profileProfession = document.querySelector('.profile .profile__main .profile__info .profile__profession');
+const profileEditButton = document.querySelector('.profile .profile__main .profile__info .profile__edit-button');
+const profileName = document.querySelector('.profile .profile__main .profile__info .profile__name');
+const profileProfession = document.querySelector('.profile .profile__main .profile__info .profile__profession');
 
-let popup = document.querySelector('.popup');
-let popupCloseButton = document.querySelector('.popup .popup__content .popup__close-button');
-let popupForm = document.querySelector('.popup .popup__content .popup__form');
-let popupSubmitButton = popupForm.querySelector('.popup__submit-button');
-let popupProfileName = popupForm.querySelector('.popup__item_name');
-let popupProfileProfession = popupForm.querySelector('.popup__item_profession');
+const popup = document.querySelector('.popup');
+const popupCloseButton = document.querySelector('.popup .popup__content .popup__close-button');
+const popupForm = document.querySelector('.popup .popup__content .popup__form');
+const popupSubmitButton = popupForm.querySelector('.popup__submit-button');
+const popupProfileName = popupForm.querySelector('.popup__item_name');
+const popupProfileProfession = popupForm.querySelector('.popup__item_profession');
 
 
-/*Управление like*/
-function like() {
-  likeButton.classList.toggle ('element__like-button_active');
+/*Реализация функции добавления новых карточек.
+В графе image задаётся значение атрибута src,
+а в графе title задаётся заголовок карточки.
+elementTemplate - шаблон карточки без заполненных данных (картинка и название) 
+с готовой HTML-разметкой.
+element - сама карточка.
+Добавление карточек */
+function addElement(image, title) {
+  const elementTemplate = document.querySelector('#element-template').content;
+  const element = elementTemplate.querySelector('.element').cloneNode(true);
+
+  element.querySelector('.element__picture').setAttribute('src', image);
+  element.querySelector('.element__picture').setAttribute('alt', title);
+  element.querySelector('.element__title').textContent = title;
+  
+  element.querySelector('.element__like-button').addEventListener('click', function (evt) {
+  evt.target.classList.toggle('element__like-button_active');
+});
+  
+  elements.append(element);
 }
 
-likeButton.addEventListener('click', like);
+/*Добавление карточек, заданных шаблоном.
+Функция самостоятельного добавления карточек 
+пользователем пока не реализована до конца.*/
+addElement('./images/image-karachaevsk.jpg', 'Карачаевск');
+addElement('./images/image-elbrus.jpg', 'Гора Эльбрус');
+addElement('./images/image-dombay.jpg', 'Домбай');
+addElement('./images/image-elbrus.jpg', 'Эльбрус');
+addElement('./images/image-dombay.jpg', 'Гора Домбай');
+addElement('./images/image-karachaevsk.jpg', 'Карачаево-Черкессия');
 
 /*Управление popup*/
 function editProfile() {
