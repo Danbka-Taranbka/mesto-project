@@ -30,6 +30,28 @@ profileAddButton.addEventListener('click', newElementPopup);
 popupElementCloseButton.addEventListener('click', newElementPopup);
 
 
+/*Задаю переменные, относящиеся к imagePopup*/
+const imagePopup = document.querySelector('.image-popup');
+const imagePopupCloseButton = imagePopup.querySelector('.popup__close-button');
+const imagePopupPicture = imagePopup.querySelector('.image-popup__image');
+const imagePopupTitle = imagePopup.querySelector('.image-popup__title');
+
+/*Функция открытия картинки*/
+function openPicture (picture, heading) {
+  imagePopup.classList.add('popup_opened');
+  imagePopupTitle.textContent = heading;
+  imagePopupPicture.setAttribute('src', picture);
+  imagePopupPicture.setAttribute('alt', heading);
+}
+
+
+function closePicture () {
+  imagePopup.classList.remove('popup_opened');
+}
+
+imagePopupCloseButton.addEventListener('click', closePicture);
+
+
 /*Функции создания и добавления новых карточек.
 В графе image задаётся значение атрибута src,
 а в графе title задаётся заголовок карточки.
@@ -46,10 +68,17 @@ function newElement(image, title) {
   element.querySelector('.element__title').textContent = title;
   
   element.querySelector('.element__like-button').addEventListener('click', function (evt) {
-  evt.target.classList.toggle('element__like-button_active');
-});
+    evt.target.classList.toggle('element__like-button_active');
+  });
   element.querySelector('.element__delete-button').addEventListener('click', function (evt) {
     evt.target.closest('.element').remove();
+  });
+    /*Разворачивание картинки.*/
+  element.querySelector('.element__picture').addEventListener('click', function (evt) {
+    let picture = evt.target.getAttribute('src');
+    let heading = evt.target.nextElementSibling.textContent;
+    evt.target.setAttribute('alt', heading);
+    openPicture(picture, heading);
   });
   /*Добавление нового элемента в конец блока elements.*/
   elements.prepend(element);
@@ -116,3 +145,4 @@ function profileSave(evt) {
 }
 
 popupProfileForm.addEventListener('submit', profileSave);
+
