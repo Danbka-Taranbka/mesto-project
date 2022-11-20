@@ -48,6 +48,9 @@ function newElement(image, title) {
   element.querySelector('.element__like-button').addEventListener('click', function (evt) {
   evt.target.classList.toggle('element__like-button_active');
 });
+  element.querySelector('.element__delete-button').addEventListener('click', function (evt) {
+    evt.target.closest('.element').remove();
+  });
   /*Добавление нового элемента в конец блока elements.*/
   elements.prepend(element);
 }

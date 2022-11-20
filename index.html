@@ -37,6 +37,7 @@
         с готовой HTML-разметкой.-->
       <template id="element-template">
         <div class="element">
+          <button type="button" class="button element__delete-button"></button>
           <img class="element__picture" src="" alt="">
           <div class="element__description">
             <h2 class="element__title"></h2>
@@ -74,6 +75,14 @@
         <input type="text" class="popup__item popup__item_image" name="image-link" placeholder="Ссылка на картинку" required>
         <button type="submit" class="popup__submit-button button">Сохранить</button>
       </form>
+    </div>
+  </section>
+
+  <section class="image-popup">
+    <div class="image-popup__content">
+      <button type="button" class="popup__close-button button"></button>
+      <img class="image-popup__image" src="./images/image-karachaevsk.jpg" alt="Карачаевск">
+      <p class="image-popup__title">Карачаевск</p>
     </div>
   </section>
   
