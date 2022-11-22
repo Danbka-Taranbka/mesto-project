@@ -18,16 +18,14 @@ const popupElementForm = popupElement.querySelector('.popup__content .popup__for
 const popupElementPlaceName = popupElementForm.querySelector('.popup__item_place-name');
 const popupElementImage = popupElementForm.querySelector('.popup__item_image');
 
-/*Открытие и закрытие popup, отвечающего за добавление новых карточек.
-Закрытие без сохранения изменений.*/
-function newElementPopup() {
-  popupElement.classList.toggle ('popup_opened');
-  popupElementImage.value = '';
-  popupElementPlaceName.value = '';
+/*Открытие любого popup.*/
+function openPopup(popup) {
+  popup.classList.toggle ('popup_opened');
 }
 
-profileAddButton.addEventListener('click', newElementPopup);
-popupElementCloseButton.addEventListener('click', newElementPopup);
+profileAddButton.addEventListener('click', function () {
+  openPopup(popupElement);
+});
 
 
 /*Задаю переменные, относящиеся к imagePopup*/
@@ -38,27 +36,21 @@ const imagePopupTitle = imagePopup.querySelector('.image-popup__title');
 
 /*Функция открытия картинки*/
 function openPicture (picture, heading) {
-  imagePopup.classList.add('popup_opened');
+  openPopup(imagePopup);
   imagePopupTitle.textContent = heading;
   imagePopupPicture.setAttribute('src', picture);
   imagePopupPicture.setAttribute('alt', heading);
 }
 
 
-function closePicture () {
-  imagePopup.classList.remove('popup_opened');
-}
-
-imagePopupCloseButton.addEventListener('click', closePicture);
-
-
-/*Функции создания и добавления новых карточек.
+/*Функции создания новых карточек.
 В графе image задаётся значение атрибута src,
 а в графе title задаётся заголовок карточки.
 elementTemplate - шаблон карточки без заполненных данных (картинка и название) 
 с готовой HTML-разметкой.
 element - сама карточка.*/
-function newElement(image, title) {
+
+function createCard (image, title) {
   /*Клонирование шаблона*/
   const elementTemplate = document.querySelector('#element-template').content;
   const element = elementTemplate.querySelector('.element').cloneNode(true);
@@ -66,7 +58,6 @@ function newElement(image, title) {
   element.querySelector('.element__picture').setAttribute('src', image);
   element.querySelector('.element__picture').setAttribute('alt', title);
   element.querySelector('.element__title').textContent = title;
-  
   element.querySelector('.element__like-button').addEventListener('click', function (evt) {
     evt.target.classList.toggle('element__like-button_active');
   });
@@ -75,43 +66,71 @@ function newElement(image, title) {
   });
     /*Разворачивание картинки.*/
   element.querySelector('.element__picture').addEventListener('click', function (evt) {
-    let picture = evt.target.getAttribute('src');
-    let heading = evt.target.nextElementSibling.textContent;
+    const picture = evt.target.getAttribute('src');
+    const heading = evt.target.nextElementSibling.textContent;
     evt.target.setAttribute('alt', heading);
     openPicture(picture, heading);
   });
-  /*Добавление нового элемента в конец блока elements.*/
+  return element;
+}
+
+/*Функции добавления новых карточек.*/
+function prependNewElement(image, title) {
+  const element = createCard (image, title);
   elements.prepend(element);
 }
 
+const initialCards = [
+  {
+    name: 'Архыз',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+  },
+  {
+    name: 'Челябинская область',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+  },
+  {
+    name: 'Иваново',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+  },
+  {
+    name: 'Камчатка',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+  },
+  {
+    name: 'Холмогорский район',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+  },
+  {
+    name: 'Байкал',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+  }
+];
+
 /*Добавление основных карточек*/
-newElement('./images/image-karachaevsk.jpg', 'Карачаевск');
-newElement('./images/image-elbrus.jpg', 'Гора Эльбрус');
-newElement('./images/image-dombay.jpg', 'Домбай');
-newElement('./images/image-elbrus.jpg', 'Эльбрус');
-newElement('./images/image-dombay.jpg', 'Гора Домбай');
-newElement('./images/image-karachaevsk.jpg', 'Карачаево-Черкессия');
+initialCards.forEach(function (item) {
+  prependNewElement(item.link, item.name);
+});
 
 
 /*Функция самостоятельного добавления новой карточки пользователем
 с помощью формы.*/
-function addNewElement (evt) {
+function createNewElement (evt) {
   /*Отмена стандартного поведения с целью отключения перезагрузки страницы.*/
   evt.preventDefault();
   /*Принимаем данные из формы и передаём их значения 
   аргументам функции добавления новой карточки.*/
-  let image = popupElementImage.value;
-  let title = popupElementPlaceName.value;
-  newElement(image, title);
+  const image = popupElementImage.value;
+  const title = popupElementPlaceName.value;
+  prependNewElement(image, title);
   
   /*Обнуление заполняемых значений формы.*/
-  popupElementImage.value = '';
-  popupElementPlaceName.value = '';
+  evt.target.reset();
 
   popupElement.classList.toggle ('popup_opened');
 }
 
-popupElementForm.addEventListener('submit', addNewElement);
+popupElementForm.addEventListener('submit', createNewElement);
 
 
 
@@ -125,24 +144,33 @@ const popupProfileProfession = popupProfileForm.querySelector('.popup__item_prof
 
 /*Открытие и закрытие popup, отвечающего за редактирования профиля.
 Закрытие без сохранения изменений.*/
-function editProfile() {
-  popupProfile.classList.toggle ('popup_opened');
-  /*Отображение действующих данных профиля (имя и профессия).*/
+profileEditButton.addEventListener('click', function () {
+  openPopup(popupProfile);
   popupProfileName.value = profileName.textContent;
   popupProfileProfession.value = profileProfession.textContent;
-}
+});
 
-profileEditButton.addEventListener('click', editProfile);
-popupProfileCloseButton.addEventListener('click', editProfile);
 
 
 /*Реализация функции редактирования профиля*/
-function profileSave(evt) {
+function saveProfileChanges(evt) {
   evt.preventDefault();/*Отмена стандартного поведения с целью отключения перезагрузки страницы.*/
   profileName.textContent = popupProfileName.value;
   profileProfession.textContent = popupProfileProfession.value;
   popupProfile.classList.toggle ('popup_opened');
 }
 
-popupProfileForm.addEventListener('submit', profileSave);
+popupProfileForm.addEventListener('submit', saveProfileChanges);
 
+
+
+function closePopup (popup) {
+  popup.classList.toggle('popup_opened');
+}
+
+const closeButtons = document.querySelectorAll('.popup__close-button');
+
+closeButtons.forEach((button) => {
+  const popup = button.closest('.popup');
+  button.addEventListener('click', () => closePopup(popup));
+});
