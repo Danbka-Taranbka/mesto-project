@@ -20,6 +20,11 @@
 @import url(../blocks/popup/__heading/popup__heading.css);
 @import url(../blocks/popup/__item/popup__item.css);
 @import url(../blocks/popup/__submit-button/popup__submit-button.css);
+@import url(../blocks/popup/__submit-button/popup__submit-button_inactive.css);
+@import url(../blocks/popup/__item/popup__item_type_error.css);
+@import url(../blocks/popup/__item-error/popup__item-error.css);
+@import url(../blocks/popup/__item-error/popup__item-error_active.css);
+@import url(../blocks/popup/__fieldset/popup__fieldset.css);
 
 @import url(../blocks/image-popup/__content/image-popup__content.css);
 @import url(../blocks/image-popup/__image/image-popup__image.css);

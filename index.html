@@ -58,23 +58,31 @@
     <div class="popup__content">
       <button type="button" class="popup__close-button button"></button>
       <h3 class="popup__heading">Редактировать профиль</h3>
-      <form class="popup__form" name="info">
-        <input type="text" class="popup__item popup__item_name" name="firstname" required>
-        <input type="text" class="popup__item popup__item_profession" name="profession" required>
+      <form class="popup__form" name="info" novalidate>
+        <fieldset class="popup__fieldset">
+        <input type="text" class="popup__item popup__item_name" id="firstname" name="firstname" minlength="2" maxlength="20" pattern="^[a-zA-Zа-яА-Я -]+$" required>
+        <span class="popup__item-error firstname-item-error"></span>
+        <input type="text" class="popup__item popup__item_profession" id="profession" name="profession" minlength="2" maxlength="200" pattern="^[a-zA-Zа-яА-Я -]+$" required>
+        <span class="popup__item-error profession-item-error"></span>
         <button type="submit" class="popup__submit-button button">Сохранить</button>
+        </fieldset>
       </form>
     </div>
   </section>
 
-  <section class="popup" id="popup-element">
+  <section class="popup" id="popup-card">
     <div class="popup__content">
       <button type="button" class="popup__close-button button"></button>
       <h3 class="popup__heading">Новое место</h3>
-      <form class="popup__form" name="info">
-        <input type="text" class="popup__item popup__item_place-name" name="place" placeholder="Название" required>
-        <input type="text" class="popup__item popup__item_image" name="image-link" placeholder="Ссылка на картинку" required>
-        <button type="submit" class="popup__submit-button button">Сохранить</button>
-      </form>
+        <form class="popup__form" name="picture" novalidate>
+          <fieldset class="popup__fieldset">
+          <input type="text" class="popup__item popup__item_place-name" id="place" name="place" placeholder="Название" minlength="2" maxlength="20" pattern="^[a-zA-Zа-яА-Я -]+$" required>
+          <span class="popup__item-error place-item-error"></span>
+          <input type="url" class="popup__item popup__item_image" id="image-link" name="image-link" placeholder="Ссылка на картинку" required>
+          <span class="popup__item-error image-link-item-error"></span>
+          <button type="submit" class="popup__submit-button button">Сохранить</button>
+          </fieldset>
+        </form>
     </div>
   </section>
 
