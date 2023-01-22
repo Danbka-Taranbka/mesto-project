@@ -1,0 +1,6 @@
+.popup__overlay {
+  width: inherit;
+  height: inherit;
+  position: fixed;
+  z-index: 2;
+}

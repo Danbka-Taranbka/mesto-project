@@ -22,6 +22,8 @@ const popupCardImage = popupCardForm.querySelector('.popup__item_image');
 function openPopup(popup) {
   popup.classList.add('popup_opened');
 }
+/*Открытие любого popup.*/
+
 
 addButton.addEventListener('click', function () {
   openPopup(popupCard);
@@ -158,13 +160,15 @@ function saveProfileChanges(evt) {
 }
 
 popupProfileForm.addEventListener('submit', saveProfileChanges);
+/*Реализация функции редактирования профиля*/
 
 
-
+/*ЗАКРЫТИЕ POPUP*/
 function closePopup (popup) {
   popup.classList.remove('popup_opened');
 }
 
+/*Закрытие нажатием на кнопку*/
 const closeButtons = document.querySelectorAll('.popup__close-button');
 
 closeButtons.forEach((button) => {
@@ -172,6 +176,8 @@ closeButtons.forEach((button) => {
   button.addEventListener('click', () => closePopup(popup));
 });
 
+
+/*Закрытие нажатием на escape*/
 function escapePopup(evt) {
   if (evt.key === 'Escape') {
     const popup = document.querySelectorAll('.popup');
@@ -182,8 +188,21 @@ function escapePopup(evt) {
 document.addEventListener('keydown', escapePopup);
 
 
-/*ВАЛИДАЦИЯ*/
+/*Закрытие нажатием на оверлей*/
+function closeOverlay () {
+  const popup = document.querySelectorAll('.popup');
+  const popupOverlayArr = Array.from(document.querySelectorAll('.popup__overlay'));
+  popupOverlayArr.forEach((element) => {
+    element.addEventListener('click', function () {
+      popup.forEach(closePopup);
+    });
+  });
+}
 
+closeOverlay();
+/*ЗАКРЫТИЕ POPUP*/
+
+/*ВАЛИДАЦИЯ*/
 const showError = (formElement, inputElement, errorMessage) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-item-error`);
   inputElement.classList.add('popup__item_type_error');
@@ -201,6 +220,12 @@ const hideError = (formElement, inputElement) => {
 };
 
 const checkInputValidity = (formElement, inputElement) => {
+  if (inputElement.validity.patternMismatch) {
+    inputElement.setCustomValidity(inputElement.dataset.errorText);
+  } else {
+    inputElement.setCustomValidity('');
+  }
+
   if (!inputElement.validity.valid) {
     showError(formElement, inputElement, inputElement.validationMessage);
   } else {
@@ -254,51 +279,4 @@ function invalidInput (inputArr) {
     return !inputElement.validity.valid;
   });
 }
-
 /*ВАЛИДАЦИЯ*/
-
-
-/*const inputItem = popupProfileForm.querySelectorAll('.popup__item');
-
-const formElement = document.querySelector('.popup__form');
-const formInput = formElement.querySelectorAll('.popup__item');
-const formInputArr = Array.from(formInput);
-
-formElement.addEventListener('submit', function (evt) {
-  evt.preventDefault();
-});
-
-function checkInputValidity (formInputArr) {
-  formInputArr.forEach((element) => {
-  element.addEventListener('input', function (evt) {
-    console.log(evt.target.validity.valid);
-})
-});
-}
-
-checkInputValidity (formInputArr);
-
-function checkFormValidity (formElement) {
-  formElement.addEventListener('input', function (evt) {
-    console.log(evt.target.validity.valid);
-  })
-}
-
-checkFormValidity (formElement);
-
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-
-function checkValidity (n) {
-  const inputArr = Array.from(n);
-  inputArr.forEach((inputElement) => {
-    if (!inputElement.validity.valid) {
-      console.log('Введите корректные данные!');
-    }
-  })
-  
-}
-
-popupProfileForm.addEventListener('input', function (evt) {
-  console.log(evt.target.validity.valid);
-  checkValidity(inputItem);
-})*/
