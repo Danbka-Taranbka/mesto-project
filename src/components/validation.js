@@ -52,10 +52,10 @@ const inputEventListeners = (formElement) => {
   });
 };
 
-function formValidation () {
+export function formValidation () {
   const formArr = Array.from(document.querySelectorAll('.popup__form'));
   formArr.forEach((formElement) => {
-  formElement.addEventListener('submit', (evt) => {
+  formElement.addEventListener('submit', function (evt) {
     evt.preventDefault();
   });
   const fieldsetArr = Array.from(formElement.querySelectorAll('.popup__fieldset'));
@@ -66,7 +66,8 @@ function formValidation () {
 });
 };
 
-formValidation();
+
+
 
 function invalidInput (inputArr) {
   return inputArr.some((inputElement) => {
@@ -74,5 +75,4 @@ function invalidInput (inputArr) {
   });
 }
 
-export { showError, hideError, checkInputValidity, buttonState, inputEventListeners, formValidation, invalidInput }
 /*ВАЛИДАЦИЯ*/

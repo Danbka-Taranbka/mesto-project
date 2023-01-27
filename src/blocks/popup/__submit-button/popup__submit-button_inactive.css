@@ -1,7 +1,7 @@
 .popup__submit-button_inactive {
   opacity: 0.2;
   background-color: white;
-  border-color: black;
+  border: 1px solid black;
   color: black; 
   cursor: default;
 }

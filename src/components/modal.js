@@ -1,4 +1,42 @@
-import { openPopup, closePopup } from './util.js';
+/*Открытие любого popup.*/
+function openPopup(popup) {
+  document.addEventListener('keydown', escapePopup);
+  popup.classList.add('popup_opened');
+  closeOverlay(popup);
+}
+
+/*ЗАКРЫТИЕ POPUP*/
+function closePopup (popup) {
+  document.removeEventListener('keydown', escapePopup);
+  popup.classList.remove('popup_opened');
+}
+
+/*Закрытие нажатием на кнопку*/
+const closeButtons = document.querySelectorAll('.popup__close-button');
+
+closeButtons.forEach((button) => {
+  const popup = button.closest('.popup');
+  button.addEventListener('click', () => closePopup(popup));
+});
+
+/*Закрытие нажатием на escape*/
+function escapePopup(evt) {
+  if (evt.key === 'Escape') {
+    const openedPopup = document.querySelector('.popup_opened');
+    closePopup(openedPopup);
+  };
+};
+
+
+/*Закрытие нажатием на оверлей*/
+function closeOverlay (popup) {
+  popup.addEventListener('mousedown', function (evt) {
+    if (evt.target.classList.contains('popup')) {
+      closePopup(popup);
+    }
+  })
+};
+/*ЗАКРЫТИЕ POPUP*/
 
 /*Кнопка редактирования профиля (имя и профессия).*/
 const profileEditButton = document.querySelector('.profile__edit-button');
@@ -35,3 +73,5 @@ function saveProfileChanges(evt) {
 
 popupProfileForm.addEventListener('submit', saveProfileChanges);
 /*Реализация функции редактирования профиля*/
+
+export { openPopup, closePopup };

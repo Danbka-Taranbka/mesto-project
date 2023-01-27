@@ -1,5 +1,3 @@
-import { openPopup, closePopup } from './util.js';
-
 /*Задаю переменные*/
 const cardTemplate = document.querySelector('.elements');
 
@@ -109,6 +107,7 @@ function createNewElement (evt) {
 
 popupCardForm.addEventListener('submit', createNewElement);
 
+
 /*Задаю переменные, относящиеся к imagePopup*/
 const imagePopup = document.querySelector('.image-popup');
 /*const imagePopupCloseButton = imagePopup.querySelector('.popup__close-button');*/
@@ -122,6 +121,3 @@ function openPicture (picture, heading) {
   imagePopupPicture.setAttribute('src', picture);
   imagePopupPicture.setAttribute('alt', heading);
 }
-
-export { cardTemplate, addButton, popupCard, popupCardForm, popupCardPlaceName, popupCardImage, createCard, 
-  prependNewElement, initialCards, createNewElement, imagePopup, imagePopupPicture, imagePopupTitle, openPicture }
