@@ -1,15 +1,17 @@
+import { restConfig } from "./util";
+
 /*ВАЛИДАЦИЯ*/
 const showError = (formElement, inputElement, errorMessage) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-item-error`);
-  inputElement.classList.add('popup__item_type_error');
+  inputElement.classList.add(restConfig.inputError);
   errorElement.textContent = errorMessage;
-  errorElement.classList.add('popup__item-error_active');
+  errorElement.classList.add(restConfig.errorClass);
 };
 
 const hideError = (formElement, inputElement) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-item-error`);
-  inputElement.classList.remove('popup__item_type_error');
-  errorElement.classList.remove('popup__item-error_active');
+  inputElement.classList.remove(restConfig.inputError);
+  errorElement.classList.remove(restConfig.errorClass);
   errorElement.textContent = '';
 };
 
@@ -30,16 +32,16 @@ const checkInputValidity = (formElement, inputElement) => {
 const buttonState = (inputArr, button) => {
   if (invalidInput(inputArr)) {
     button.setAttribute('disabled', true);
-    button.classList.add('popup__submit-button_inactive');
+    button.classList.add(restConfig.inactiveButton);
   } else {
     button.removeAttribute('disabled', false);
-    button.classList.remove('popup__submit-button_inactive');
+    button.classList.remove(restConfig.inactiveButton);
   }
 }
 
 const inputEventListeners = (formElement) => {
-  const inputArr = Array.from(formElement.querySelectorAll('.popup__item'));
-  const button = formElement.querySelector('.popup__submit-button');
+  const inputArr = Array.from(formElement.querySelectorAll(restConfig.inputElement));
+  const button = formElement.querySelector(restConfig.button);
   
   buttonState(inputArr, button);
 
@@ -52,16 +54,16 @@ const inputEventListeners = (formElement) => {
   });
 };
 
-export function formValidation () {
-  const formArr = Array.from(document.querySelectorAll('.popup__form'));
-  formArr.forEach((formElement) => {
-  formElement.addEventListener('submit', function (evt) {
+function formValidation (restConfig) {
+  const formArr = Array.from(document.querySelectorAll(restConfig.formElement));
+  
+  formArr.forEach((form) => {
+  form.addEventListener('submit', function (evt) {
     evt.preventDefault();
   });
-  const fieldsetArr = Array.from(formElement.querySelectorAll('.popup__fieldset'));
   
-  fieldsetArr.forEach((fieldSet) => {
-    inputEventListeners(fieldSet);
+  formArr.forEach((form) => {
+    inputEventListeners(form);
   });
 });
 };
@@ -75,4 +77,5 @@ function invalidInput (inputArr) {
   });
 }
 
+export { formValidation, invalidInput}
 /*ВАЛИДАЦИЯ*/

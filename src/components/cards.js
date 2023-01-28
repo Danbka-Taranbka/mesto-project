@@ -1,3 +1,5 @@
+import { openPopup, closePopup } from './modal.js';
+
 /*Задаю переменные*/
 const cardTemplate = document.querySelector('.elements');
 
@@ -121,3 +123,6 @@ function openPicture (picture, heading) {
   imagePopupPicture.setAttribute('src', picture);
   imagePopupPicture.setAttribute('alt', heading);
 }
+
+export { cardTemplate, addButton, popupCard, popupCardForm, popupCardPlaceName, popupCardImage, createCard, 
+  prependNewElement, initialCards, createNewElement, imagePopup, imagePopupPicture, imagePopupTitle, openPicture }
