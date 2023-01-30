@@ -90,7 +90,6 @@ initialCards.forEach(function (item) {
 /*Функция самостоятельного добавления новой карточки пользователем
 с помощью формы.*/
 function createNewElement (evt) {
-  const submitButton = popupCard.querySelector('.popup__submit-button');
   /*Отмена стандартного поведения с целью отключения перезагрузки страницы.*/
   evt.preventDefault();
   /*Принимаем данные из формы и передаём их значения 
@@ -103,11 +102,8 @@ function createNewElement (evt) {
   evt.target.reset();
   
   closePopup(popupCard);
-  submitButton.setAttribute('disabled', true);
-  submitButton.classList.add('popup__submit-button_inactive');
 }
 
-popupCardForm.addEventListener('submit', createNewElement);
 
 
 /*Задаю переменные, относящиеся к imagePopup*/

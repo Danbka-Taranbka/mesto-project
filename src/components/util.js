@@ -1,5 +1,5 @@
 
-const restConfig = {
+const configuration = {
   formElement: '.popup__form',
   inputElement: '.popup__item',
   button: '.popup__submit-button',
@@ -8,4 +8,6 @@ const restConfig = {
   errorClass: 'popup__item-error_active'
 };
 
-export { restConfig };
+export { configuration };
+
+
