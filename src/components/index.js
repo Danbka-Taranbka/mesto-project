@@ -1,14 +1,12 @@
-import { configuration } from './util.js';
+import { configuration } from './utils.js';
 
-import { enableValidation } from './validation.js';
+import { enableValidation } from './validate.js';
 
-import { popupCardForm, createNewElement} from './cards.js';
+import { popupCardForm, createNewElement} from './card.js';
 
 import { openPopup, closePopup } from './modal.js';
 
 import '../pages/index.css';
-
-
 
 popupCardForm.addEventListener('submit', createNewElement);
 

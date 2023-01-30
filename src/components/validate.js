@@ -1,5 +1,6 @@
 function enableValidation (restConfig) {
   const formList = Array.from(document.querySelectorAll(restConfig.formElement));
+  
   const showInputError = (formElement, inputElement, errorMessage) => {
     const errorElement = formElement.querySelector(`.${inputElement.id}-item-error`);
     inputElement.classList.add(restConfig.inputError);
@@ -36,10 +37,10 @@ function enableValidation (restConfig) {
   
   const toggleButtonState = (inputList, buttonElement) => {
     if (hasInvalidInput(inputList)) {
-      button.setAttribute('disabled', true);
+      buttonElement.setAttribute('disabled', true);
       buttonElement.classList.add(restConfig.inactiveButton);
     } else {
-      button.setAttribute('disabled', false);
+      buttonElement.removeAttribute('disabled', true);
       buttonElement.classList.remove(restConfig.inactiveButton);
     }
   }
@@ -65,9 +66,5 @@ function enableValidation (restConfig) {
 
   });
 };
-
-
-
-
 
 export {enableValidation}
