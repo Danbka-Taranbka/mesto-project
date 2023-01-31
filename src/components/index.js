@@ -1,14 +1,32 @@
-import { configuration } from './utils.js';
+import { configuration, initialCards } from './utils.js';
 
 import { enableValidation } from './validate.js';
 
-import { popupCardForm, createNewElement} from './card.js';
+import { popupCardForm, createNewElement, addButton, popupCard, prependNewElement} from './card.js';
 
 import { openPopup, closePopup } from './modal.js';
 
 import '../pages/index.css';
 
-popupCardForm.addEventListener('submit', createNewElement);
+addButton.addEventListener('click', function () {
+  openPopup(popupCard);
+});
+
+popupCardForm.addEventListener('submit', function (evt) {
+    /*Отмена стандартного поведения с целью отключения перезагрузки страницы.*/
+  evt.preventDefault();
+  const submitButton = popupCard.querySelector('.popup__submit-button');
+  createNewElement();
+  /*Обнуление заполняемых значений формы.*/
+  evt.target.reset();
+  submitButton.setAttribute('disabled', true);
+  submitButton.classList.add('popup__submit-button_inactive');
+});
+
+/*Добавление основных карточек*/
+initialCards.forEach(function (item) {
+  prependNewElement(item.link, item.name);
+});
 
 /*Кнопка редактирования профиля (имя и профессия).*/
 const profileEditButton = document.querySelector('.profile__edit-button');

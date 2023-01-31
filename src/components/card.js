@@ -1,4 +1,4 @@
-import { openPopup, closePopup } from './modal.js';
+import { closePopup, openPicture } from './modal.js';
 
 /*Задаю переменные*/
 const cardTemplate = document.querySelector('.elements');
@@ -13,10 +13,6 @@ const popupCard = document.querySelector('#popup-card');
 const popupCardForm = popupCard.querySelector('.popup__content .popup__form');
 const popupCardPlaceName = popupCardForm.querySelector('.popup__item_place-name');
 const popupCardImage = popupCardForm.querySelector('.popup__item_image');
-
-addButton.addEventListener('click', function () {
-  openPopup(popupCard);
-});
 
 
 /*Функции создания новых карточек.
@@ -54,74 +50,21 @@ function prependNewElement(image, title) {
   cardTemplate.prepend(element);
 }
 
-const initialCards = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-];
-
-/*Добавление основных карточек*/
-initialCards.forEach(function (item) {
-  prependNewElement(item.link, item.name);
-});
-
-
 /*Функция самостоятельного добавления новой карточки пользователем
 с помощью формы.*/
 function createNewElement (evt) {
-  const submitButton = popupCard.querySelector('.popup__submit-button');
-  /*Отмена стандартного поведения с целью отключения перезагрузки страницы.*/
-  evt.preventDefault();
+
   /*Принимаем данные из формы и передаём их значения 
   аргументам функции добавления новой карточки.*/
   const image = popupCardImage.value;
   const title = popupCardPlaceName.value;
   prependNewElement(image, title);
-  
-  /*Обнуление заполняемых значений формы.*/
-  evt.target.reset();
-  
   closePopup(popupCard);
-  submitButton.setAttribute('disabled', true);
-  submitButton.classList.add('popup__submit-button_inactive');
 }
 
 
 
-/*Задаю переменные, относящиеся к imagePopup*/
-const imagePopup = document.querySelector('.image-popup');
-/*const imagePopupCloseButton = imagePopup.querySelector('.popup__close-button');*/
-const imagePopupPicture = imagePopup.querySelector('.image-popup__image');
-const imagePopupTitle = imagePopup.querySelector('.image-popup__title');
 
-/*Функция открытия картинки*/
-function openPicture (picture, heading) {
-  openPopup(imagePopup);
-  imagePopupTitle.textContent = heading;
-  imagePopupPicture.setAttribute('src', picture);
-  imagePopupPicture.setAttribute('alt', heading);
-}
 
 export { cardTemplate, addButton, popupCard, popupCardForm, popupCardPlaceName, popupCardImage, createCard, 
-  prependNewElement, initialCards, createNewElement, imagePopup, imagePopupPicture, imagePopupTitle, openPicture }
+  prependNewElement, createNewElement }
