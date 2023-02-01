@@ -11,8 +11,7 @@ const addButton = document.querySelector('.profile__add-button');
 const popupCard = document.querySelector('#popup-card');
 /*const popupCardCloseButton = popupCard.querySelector('.popup__content .popup__close-button');*/
 const popupCardForm = popupCard.querySelector('.popup__content .popup__form');
-const popupCardPlaceName = popupCardForm.querySelector('.popup__item_place-name');
-const popupCardImage = popupCardForm.querySelector('.popup__item_image');
+
 
 
 /*Функции создания новых карточек.
@@ -50,21 +49,11 @@ function prependNewElement(image, title) {
   cardTemplate.prepend(element);
 }
 
-/*Функция самостоятельного добавления новой карточки пользователем
-с помощью формы.*/
-function createNewElement (evt) {
-
-  /*Принимаем данные из формы и передаём их значения 
-  аргументам функции добавления новой карточки.*/
-  const image = popupCardImage.value;
-  const title = popupCardPlaceName.value;
-  prependNewElement(image, title);
-  closePopup(popupCard);
-}
 
 
 
 
 
-export { cardTemplate, addButton, popupCard, popupCardForm, popupCardPlaceName, popupCardImage, createCard, 
-  prependNewElement, createNewElement }
+
+export { cardTemplate, addButton, popupCard, popupCardForm, createCard, 
+  prependNewElement}

@@ -2,11 +2,12 @@
 function openPopup(popup) {
   popup.classList.add('popup_opened');
   document.addEventListener('keydown', escapePopup);
-  closeOverlay(popup);
+  popup.addEventListener('mousedown', closeOverlay)
 }
 
 /*ЗАКРЫТИЕ POPUP*/
 function closePopup (popup) {
+  popup.removeEventListener('mousedown', closeOverlay)
   document.removeEventListener('keydown', escapePopup);
   popup.classList.remove('popup_opened');
 }
@@ -28,13 +29,13 @@ function escapePopup(evt) {
 };
 
 /*Закрытие нажатием на оверлей*/
-function closeOverlay (popup) {
-  popup.addEventListener('mousedown', function (evt) {
+function closeOverlay (evt) {
     if (evt.target.classList.contains('popup')) {
       closePopup(evt.target);
     }
-  })
-};
+  }
+
+
 /*ЗАКРЫТИЕ POPUP*/
 
 /*Задаю переменные, относящиеся к imagePopup*/

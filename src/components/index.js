@@ -8,6 +8,9 @@ import { openPopup, closePopup } from './modal.js';
 
 import '../pages/index.css';
 
+const popupCardPlaceName = popupCardForm.querySelector('.popup__item_place-name');
+const popupCardImage = popupCardForm.querySelector('.popup__item_image');
+
 addButton.addEventListener('click', function () {
   openPopup(popupCard);
 });
@@ -16,11 +19,12 @@ popupCardForm.addEventListener('submit', function (evt) {
     /*Отмена стандартного поведения с целью отключения перезагрузки страницы.*/
   evt.preventDefault();
   const submitButton = popupCard.querySelector('.popup__submit-button');
-  createNewElement();
+  prependNewElement(popupCardImage.value, popupCardPlaceName.value);
   /*Обнуление заполняемых значений формы.*/
   evt.target.reset();
   submitButton.setAttribute('disabled', true);
   submitButton.classList.add('popup__submit-button_inactive');
+  closePopup(popupCard);
 });
 
 /*Добавление основных карточек*/
