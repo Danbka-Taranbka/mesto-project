@@ -45,7 +45,7 @@ function createCard (image, title) {
 
 /*Функции добавления новых карточек.*/
 function prependNewElement(image, title) {
-  const element = createCard (image, title);
+  const element = createCard(image, title);
   cardTemplate.prepend(element);
 }
 

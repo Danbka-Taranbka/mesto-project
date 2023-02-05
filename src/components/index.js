@@ -1,4 +1,4 @@
-import { configuration, initialCards } from './utils.js';
+import { configuration } from './utils.js';
 
 import { enableValidation } from './validate.js';
 
@@ -20,6 +20,7 @@ popupCardForm.addEventListener('submit', function (evt) {
   evt.preventDefault();
   const submitButton = popupCard.querySelector('.popup__submit-button');
   prependNewElement(popupCardImage.value, popupCardPlaceName.value);
+  addCard(popupCardPlaceName.value, popupCardImage.value);
   /*Обнуление заполняемых значений формы.*/
   evt.target.reset();
   submitButton.setAttribute('disabled', true);
@@ -27,16 +28,11 @@ popupCardForm.addEventListener('submit', function (evt) {
   closePopup(popupCard);
 });
 
-/*Добавление основных карточек*/
-initialCards.forEach(function (item) {
-  prependNewElement(item.link, item.name);
-});
-
 /*Кнопка редактирования профиля (имя и профессия).*/
 const profileEditButton = document.querySelector('.profile__edit-button');
 
-const profileName = document.querySelector('.profile__name');
-const profileProfession = document.querySelector('.profile__profession');
+export const profileName = document.querySelector('.profile__name');
+export const profileProfession = document.querySelector('.profile__profession');
 
 /*Переменные, содержащие ключевое слово popupProfile 
 используются для работы с данными формы.*/
@@ -59,6 +55,7 @@ function saveProfileChanges(evt) {
   evt.preventDefault();/*Отмена стандартного поведения с целью отключения перезагрузки страницы.*/
   profileName.textContent = popupProfileName.value;
   profileProfession.textContent = popupProfileProfession.value;
+  editProfileInfo(popupProfileName.value, popupProfileProfession.value);
   closePopup(popupProfile);
 }
 
@@ -66,3 +63,9 @@ popupProfileForm.addEventListener('submit', saveProfileChanges);
 /*Реализация функции редактирования профиля*/
 
 enableValidation(configuration);
+
+import { getProfileInfo, editProfileInfo, getCards, addCard } from './api.js';
+
+getProfileInfo();
+
+getCards();
