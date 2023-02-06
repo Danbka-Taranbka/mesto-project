@@ -1,6 +1,8 @@
 import { profileName, profileProfession, avatarImage } from './index.js'
 import { prependNewElement } from './card.js'
 
+/*Функции удаления карточки и всё, что связано с лайками в процессе разработки*/
+
 export function getProfileInfo() {
   return fetch('https://nomoreparties.co/v1/plus-cohort-19/users/me', {
     method: 'GET',
