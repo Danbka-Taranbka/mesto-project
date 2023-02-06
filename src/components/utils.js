@@ -1,4 +1,3 @@
-
 const configuration = {
   formElement: '.popup__form',
   inputElement: '.popup__item',
@@ -8,6 +7,6 @@ const configuration = {
   errorClass: 'popup__item-error_active'
 };
 
-export { configuration};
+export { configuration };
 
 

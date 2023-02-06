@@ -5,4 +5,11 @@
 
   object-fit: cover;
   object-position: center;
+  z-index: 4;
+}
+
+.profile__avatar:hover {
+  cursor: pointer;
+  opacity: 0.8;
+  z-index: 2;
 }

@@ -6,6 +6,8 @@ import { popupCardForm, createNewElement, addButton, popupCard, prependNewElemen
 
 import { openPopup, closePopup } from './modal.js';
 
+import { getProfileInfo, editProfileInfo, getCards, addCard, changeAvatar, getAvatar } from './api.js';
+
 import '../pages/index.css';
 
 const popupCardPlaceName = popupCardForm.querySelector('.popup__item_place-name');
@@ -62,10 +64,31 @@ function saveProfileChanges(evt) {
 popupProfileForm.addEventListener('submit', saveProfileChanges);
 /*Реализация функции редактирования профиля*/
 
-enableValidation(configuration);
-
-import { getProfileInfo, editProfileInfo, getCards, addCard } from './api.js';
 
 getProfileInfo();
 
 getCards();
+
+getAvatar();
+
+const popupAvatar = document.querySelector('#popup-avatar')
+const popupAvatarLink = document.querySelector('.popup__item_avatar');
+export const avatarImage = document.querySelector('.profile__avatar');
+const avatarForm = popupAvatar.querySelector('.popup__form');
+
+export function editAvatar() {
+  avatarImage.setAttribute('src', popupAvatarLink.value);
+  closePopup(popupAvatar);
+}
+
+avatarImage.addEventListener('click', function () {
+  openPopup(popupAvatar);
+});
+
+avatarForm.addEventListener('submit', function (evt) {
+  evt.preventDefault();
+  editAvatar();
+  changeAvatar(popupAvatarLink.value);
+})
+
+enableValidation(configuration);

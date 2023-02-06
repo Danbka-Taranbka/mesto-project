@@ -20,3 +20,7 @@
 .popup__item-error:last-of-type {
   top: 115px;
 }
+
+.avatar-item-error {
+  margin-top: -83px;
+}
