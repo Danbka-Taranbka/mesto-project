@@ -7,6 +7,14 @@ const configuration = {
   errorClass: 'popup__item-error_active'
 };
 
-export { configuration };
+const serverConfig = {
+  baseUrl: `https://nomoreparties.co/v1/plus-cohort-19`,
+  headers: {
+    authorization: 'b6693749-9ba6-476d-9834-fe4f27e2ee16',
+    'Content-Type': 'application/json',
+  },
+};
+
+export { configuration, serverConfig };
 
 

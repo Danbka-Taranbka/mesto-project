@@ -2,11 +2,11 @@ import { configuration } from './utils.js';
 
 import { enableValidation } from './validate.js';
 
-import { popupCardForm, createNewElement, addButton, popupCard, prependNewElement} from './card.js';
+import { popupCardForm, addButton, popupCard, prependNewElement} from './card.js';
 
 import { openPopup, closePopup } from './modal.js';
 
-import { getProfileInfo, editProfileInfo, getCards, addCard, changeAvatar, getAvatar } from './api.js';
+import { getProfileInfo, editProfileInfo, getCards, addCard, changeAvatar, getAvatar, getPromise } from './api.js';
 
 import '../pages/index.css';
 
@@ -21,13 +21,19 @@ popupCardForm.addEventListener('submit', function (evt) {
     /*Отмена стандартного поведения с целью отключения перезагрузки страницы.*/
   evt.preventDefault();
   const submitButton = popupCard.querySelector('.popup__submit-button');
-  prependNewElement(popupCardImage.value, popupCardPlaceName.value);
-  addCard(popupCardPlaceName.value, popupCardImage.value);
+  addCard(popupCardPlaceName.value, popupCardImage.value)
+    .then((res) => {
+      prependNewElement(res.link, res.name,  res._id, res.owner._id);
+    })
+    .then(closePopup(popupCard))
+    .catch((err) => {
+      console.log(err);
+    });
   /*Обнуление заполняемых значений формы.*/
   evt.target.reset();
   submitButton.setAttribute('disabled', true);
   submitButton.classList.add('popup__submit-button_inactive');
-  closePopup(popupCard);
+
 });
 
 /*Кнопка редактирования профиля (имя и профессия).*/
@@ -57,29 +63,54 @@ function saveProfileChanges(evt) {
   evt.preventDefault();/*Отмена стандартного поведения с целью отключения перезагрузки страницы.*/
   profileName.textContent = popupProfileName.value;
   profileProfession.textContent = popupProfileProfession.value;
-  editProfileInfo(popupProfileName.value, popupProfileProfession.value);
-  closePopup(popupProfile);
+  editProfileInfo(popupProfileName.value, popupProfileProfession.value)
+    .then(  closePopup(popupProfile))
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 popupProfileForm.addEventListener('submit', saveProfileChanges);
 /*Реализация функции редактирования профиля*/
 
 
-getProfileInfo();
 
-getCards();
+getPromise()
+  .then(getProfileInfo()
+  .then((data) => {
+    profileName.textContent = data.name;
+    profileProfession.textContent = data.about;
+  })
+  .catch((err) => {
+    console.log(err);
+  }))
+  .then(() => {
+    getCards()
+      .then((data) => {
+        data.forEach((element) => {
+          prependNewElement(element.link, element.name, element._id, element.owner._id);
+          })
+        })
+  }).catch((err) => {
+  console.log(err);
+});
 
-getAvatar();
+
+
+
+
+getAvatar()
+  .then((data) => {
+    avatarImage.setAttribute('src', data.avatar);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 const popupAvatar = document.querySelector('#popup-avatar')
 const popupAvatarLink = document.querySelector('.popup__item_avatar');
 export const avatarImage = document.querySelector('.profile__avatar');
 const avatarForm = popupAvatar.querySelector('.popup__form');
-
-export function editAvatar() {
-  avatarImage.setAttribute('src', popupAvatarLink.value);
-  closePopup(popupAvatar);
-}
 
 avatarImage.addEventListener('click', function () {
   openPopup(popupAvatar);
@@ -87,8 +118,14 @@ avatarImage.addEventListener('click', function () {
 
 avatarForm.addEventListener('submit', function (evt) {
   evt.preventDefault();
-  editAvatar();
-  changeAvatar(popupAvatarLink.value);
+  changeAvatar(popupAvatarLink.value)
+    .then((data) => {
+      avatarImage.setAttribute('src', data.avatar);
+    })
+    .then(closePopup(popupAvatar))
+    .catch((err) => {
+      console.log(err);
+    });
 })
 
 enableValidation(configuration);

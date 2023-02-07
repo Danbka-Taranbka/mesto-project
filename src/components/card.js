@@ -1,4 +1,5 @@
-import { closePopup, openPicture } from './modal.js';
+import { openPicture } from './modal.js';
+import { deleteCard, getProfileInfo } from './api.js';
 
 /*Задаю переменные*/
 const cardTemplate = document.querySelector('.elements');
@@ -21,31 +22,47 @@ elementTemplate - шаблон карточки без заполненных д
 с готовой HTML-разметкой.
 element - сама карточка.*/
 
-function createCard (image, title) {
+function createCard (image, title, id, ownerId) {
   /*Клонирование шаблона*/
   const elementTemplate = document.querySelector('#element-template').content;
   const element = elementTemplate.querySelector('.element').cloneNode(true);
   const cardImage = element.querySelector('.element__picture');
+  const deleteButton = element.querySelector('.element__delete-button');
+  deleteButton.setAttribute('disabled', true);
+  const likeButton = element.querySelector('.element__like-button');
+  const likesCounter = element.querySelector('.element__like-counter');
 
   cardImage.setAttribute('src', image);
   cardImage.setAttribute('alt', title);
   element.querySelector('.element__title').textContent = title;
-  element.querySelector('.element__like-button').addEventListener('click', function (evt) {
+
+  likeButton.addEventListener('click', function (evt) {
     evt.target.classList.toggle('element__like-button_active');
   });
-  element.querySelector('.element__delete-button').addEventListener('click', function (evt) {
-    evt.target.closest('.element').remove();
-  });
+
+  getProfileInfo().then((res) => {
+    const userId = res._id;
+    if (ownerId === userId) {
+    deleteButton.classList.add('element__delete-button_active');
+    deleteButton.removeAttribute('disabled', true);
+    deleteButton.addEventListener('click', function (evt) {
+      evt.target.closest('.element').remove();
+      deleteCard(id);
+    });
+  };
+}).catch((err) => {
+  console.log(err);
+});
     /*Разворачивание картинки.*/
-    cardImage.addEventListener('click', function (evt) {
+    cardImage.addEventListener('click', function () {
     openPicture(image, title);
   });
   return element;
 }
 
 /*Функции добавления новых карточек.*/
-function prependNewElement(image, title) {
-  const element = createCard(image, title);
+function prependNewElement(image, title, id, ownerId) {
+  const element = createCard(image, title, id, ownerId);
   cardTemplate.prepend(element);
 }
 
