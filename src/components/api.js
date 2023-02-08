@@ -99,15 +99,16 @@ export function deleteLike(cardId) {
 }
 
 
-export function getCardInfo() {
+function getCardInfo(cardId) {
   return fetch(`${serverConfig.baseUrl}/cards`, {
     method: 'GET',
     headers: serverConfig.headers,
-    })
-    .then((res) => {
-      return res.json();
-    })
+    }).then(checkStatus)
     .then((data) => {
-      console.log(data);
+      let cardLikes = data.find(card => card._id === cardId).likes;
+      return cardLikes;
     })
 }
+
+getCardInfo('63e2cb5f79c1d903fc2038ae');
+  

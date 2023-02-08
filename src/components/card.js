@@ -1,6 +1,6 @@
 import { openPicture } from './modal.js';
-import { deleteCard, getProfileInfo } from './api.js';
-
+import { deleteCard, getCards, putLike, deleteLike } from './api.js';
+import { userId, renderLikes } from './index.js';
 /*Задаю переменные*/
 const cardTemplate = document.querySelector('.elements');
 
@@ -37,11 +37,21 @@ function createCard (image, title, id, ownerId) {
   element.querySelector('.element__title').textContent = title;
 
   likeButton.addEventListener('click', function (evt) {
-    evt.target.classList.toggle('element__like-button_active');
+    getCards().then((data) => {
+      let cardLikes = data.find(card => card._id === id).likes;
+      return cardLikes.find(like => like._id === userId);
+    }).then((res) => {
+      if (res === undefined) {
+        putLike(id).then(renderLikes(id, likesCounter, likeButton));
+        console.log('like added');
+      } else {
+        deleteLike(id).then(renderLikes(id, likesCounter, likeButton));
+        console.log('like deleted');
+      }
+    })
+    
   });
 
-  getProfileInfo().then((res) => {
-    const userId = res._id;
     if (ownerId === userId) {
     deleteButton.classList.add('element__delete-button_active');
     deleteButton.removeAttribute('disabled', true);
@@ -50,9 +60,9 @@ function createCard (image, title, id, ownerId) {
       deleteCard(id);
     });
   };
-}).catch((err) => {
-  console.log(err);
-});
+
+  renderLikes(id, likesCounter, likeButton);
+
     /*Разворачивание картинки.*/
     cardImage.addEventListener('click', function () {
     openPicture(image, title);

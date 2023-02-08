@@ -6,9 +6,11 @@ import { popupCardForm, addButton, popupCard, prependNewElement} from './card.js
 
 import { openPopup, closePopup } from './modal.js';
 
-import { getProfileInfo, editProfileInfo, getCards, addCard, changeAvatar, getAvatar, getPromise } from './api.js';
+import { editProfileInfo, getCards, addCard, changeAvatar, getAvatar, getPromise } from './api.js';
 
 import '../pages/index.css';
+
+export let userId;
 
 const popupCardPlaceName = popupCardForm.querySelector('.popup__item_place-name');
 const popupCardImage = popupCardForm.querySelector('.popup__item_image');
@@ -24,16 +26,17 @@ popupCardForm.addEventListener('submit', function (evt) {
   addCard(popupCardPlaceName.value, popupCardImage.value)
     .then((res) => {
       prependNewElement(res.link, res.name,  res._id, res.owner._id);
+      submitButton.textContent = 'Сохранение...';
     })
     .then(closePopup(popupCard))
     .catch((err) => {
       console.log(err);
-    });
-  /*Обнуление заполняемых значений формы.*/
-  evt.target.reset();
-  submitButton.setAttribute('disabled', true);
-  submitButton.classList.add('popup__submit-button_inactive');
-
+    }).finally(() => {
+      evt.target.reset();
+      submitButton.setAttribute('disabled', true);
+      submitButton.classList.add('popup__submit-button_inactive');
+      evt.submitter.textContent = 'Сохранить';
+    })
 });
 
 /*Кнопка редактирования профиля (имя и профессия).*/
@@ -64,26 +67,32 @@ function saveProfileChanges(evt) {
   profileName.textContent = popupProfileName.value;
   profileProfession.textContent = popupProfileProfession.value;
   editProfileInfo(popupProfileName.value, popupProfileProfession.value)
-    .then(  closePopup(popupProfile))
+    .then(() => {
+      closePopup(popupProfile);
+      evt.submitter.textContent = 'Сохранение...';
+    })
     .catch((err) => {
       console.log(err);
-    });
+    }).finally(() => {
+      evt.target.reset();
+      evt.submitter.setAttribute('disabled', true);
+      evt.submitter.classList.add('popup__submit-button_inactive');
+      evt.submitter.textContent = 'Сохранить';
+    })
 }
 
 popupProfileForm.addEventListener('submit', saveProfileChanges);
 /*Реализация функции редактирования профиля*/
 
 
-
 getPromise()
-  .then(getProfileInfo()
-  .then((data) => {
-    profileName.textContent = data.name;
-    profileProfession.textContent = data.about;
-  })
-  .catch((err) => {
-    console.log(err);
-  }))
+  .then(getAvatar()
+    .then((data) => {
+      updateUserInfo(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    }))
   .then(() => {
     getCards()
       .then((data) => {
@@ -95,17 +104,39 @@ getPromise()
   console.log(err);
 });
 
-
-
-
-
-getAvatar()
-  .then((data) => {
-    avatarImage.setAttribute('src', data.avatar);
-  })
+export function renderLikes(cardId, text, button) {
+  getCards().then((data) => {
+    let cardLikes = data.find(card => card._id === cardId).likes;
+    return (cardLikes.length);
+  }).then((res) => {
+    text.textContent = res;
+  }).then (getCards().then((data) => {
+    let cardLikes = data.find(card => card._id === cardId).likes;
+    return cardLikes.find(like => like._id === userId);
+  }).then((res) => {
+    if (res !== undefined) {
+      button.classList.add('element__like-button_active');
+    } else {
+      button.classList.remove('element__like-button_active');
+    }
+  }))
   .catch((err) => {
     console.log(err);
   });
+}
+
+
+
+function updateUserInfo(user) {
+  profileProfession.textContent = user.about;
+  profileName.textContent = user.name;
+  avatarImage.src = user.avatar;
+
+  userId = user._id;
+}
+
+
+
 
 const popupAvatar = document.querySelector('#popup-avatar')
 const popupAvatarLink = document.querySelector('.popup__item_avatar');
@@ -121,11 +152,17 @@ avatarForm.addEventListener('submit', function (evt) {
   changeAvatar(popupAvatarLink.value)
     .then((data) => {
       avatarImage.setAttribute('src', data.avatar);
+      evt.submitter.textContent = 'Сохранение...';
     })
     .then(closePopup(popupAvatar))
     .catch((err) => {
       console.log(err);
-    });
+    }).finally(() => {
+      evt.target.reset();
+      evt.submitter.setAttribute('disabled', true);
+      evt.submitter.classList.add('popup__submit-button_inactive');
+      evt.submitter.textContent = 'Сохранить';
+    })
 })
 
 enableValidation(configuration);
