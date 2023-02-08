@@ -45,13 +45,13 @@ function createCard (image, title, id, ownerId, massive) {
   likeButton.addEventListener('click', function () {
     if (likeButton.classList.contains('element__like-button_active')) {
       deleteLike(id)
+        .then((res) => {likesCounter.textContent = res.likes.length;})
         .then(() => {likeButton.classList.remove('element__like-button_active');})
-        .then(() => {likesCounter.textContent = (Number(likesCounter.textContent) - 1);})
         .catch((err) => {console.log(err);})
     } else {
       putLike(id)
+        .then((res) => {likesCounter.textContent = res.likes.length;})
         .then(() => {likeButton.classList.add('element__like-button_active');})
-        .then(() => {likesCounter.textContent = (Number(likesCounter.textContent) + 1);})
         .catch((err) => {console.log(err);})
     }
     

@@ -97,7 +97,7 @@ getPromise()
   .then(() => {
     getCards()
       .then((data) => {
-        data.forEach((element) => {
+        data.reverse().forEach((element) => {
           prependNewElement(element.link, element.name, element._id, element.owner._id, element);
           })
         })
