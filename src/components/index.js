@@ -108,7 +108,7 @@ getPromise()
 export function renderLikes(counter, massive) {
   return counter.textContent = massive.likes.length;
 }
-
+/*Спасибо за понятные комментарии!*/
 export function isLiked(massive) {
   const isLiked = massive.likes.find(like => like._id === userId);
   if (isLiked === undefined) {
