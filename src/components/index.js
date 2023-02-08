@@ -22,19 +22,18 @@ addButton.addEventListener('click', function () {
 popupCardForm.addEventListener('submit', function (evt) {
     /*Отмена стандартного поведения с целью отключения перезагрузки страницы.*/
   evt.preventDefault();
-  const submitButton = popupCard.querySelector('.popup__submit-button');
+  evt.submitter.textContent = 'Сохранение...';
   addCard(popupCardPlaceName.value, popupCardImage.value)
     .then((res) => {
-      prependNewElement(res.link, res.name,  res._id, res.owner._id);
-      submitButton.textContent = 'Сохранение...';
+      prependNewElement(res.link, res.name,  res._id, res.owner._id, res);
     })
     .then(closePopup(popupCard))
     .catch((err) => {
       console.log(err);
     }).finally(() => {
       evt.target.reset();
-      submitButton.setAttribute('disabled', true);
-      submitButton.classList.add('popup__submit-button_inactive');
+      evt.submitter.setAttribute('disabled', true);
+      evt.submitter.classList.add('popup__submit-button_inactive');
       evt.submitter.textContent = 'Сохранить';
     })
 });
@@ -64,12 +63,14 @@ profileEditButton.addEventListener('click', function () {
 /*Реализация функции редактирования профиля*/
 function saveProfileChanges(evt) {
   evt.preventDefault();/*Отмена стандартного поведения с целью отключения перезагрузки страницы.*/
-  profileName.textContent = popupProfileName.value;
-  profileProfession.textContent = popupProfileProfession.value;
+  evt.submitter.textContent = 'Сохранение...';
   editProfileInfo(popupProfileName.value, popupProfileProfession.value)
     .then(() => {
+      profileName.textContent = popupProfileName.value;
+      profileProfession.textContent = popupProfileProfession.value;
+    })
+    .then(() => {
       closePopup(popupProfile);
-      evt.submitter.textContent = 'Сохранение...';
     })
     .catch((err) => {
       console.log(err);
@@ -97,35 +98,25 @@ getPromise()
     getCards()
       .then((data) => {
         data.forEach((element) => {
-          prependNewElement(element.link, element.name, element._id, element.owner._id);
+          prependNewElement(element.link, element.name, element._id, element.owner._id, element);
           })
         })
   }).catch((err) => {
   console.log(err);
 });
 
-export function renderLikes(cardId, text, button) {
-  getCards().then((data) => {
-    let cardLikes = data.find(card => card._id === cardId).likes;
-    return (cardLikes.length);
-  }).then((res) => {
-    text.textContent = res;
-  }).then (getCards().then((data) => {
-    let cardLikes = data.find(card => card._id === cardId).likes;
-    return cardLikes.find(like => like._id === userId);
-  }).then((res) => {
-    if (res !== undefined) {
-      button.classList.add('element__like-button_active');
-    } else {
-      button.classList.remove('element__like-button_active');
-    }
-  }))
-  .catch((err) => {
-    console.log(err);
-  });
+export function renderLikes(counter, massive) {
+  return counter.textContent = massive.likes.length;
 }
 
-
+export function isLiked(massive) {
+  const isLiked = massive.likes.find(like => like._id === userId);
+  if (isLiked === undefined) {
+    return false;
+  } else {
+    return true;
+  }
+}
 
 function updateUserInfo(user) {
   profileProfession.textContent = user.about;
@@ -149,10 +140,10 @@ avatarImage.addEventListener('click', function () {
 
 avatarForm.addEventListener('submit', function (evt) {
   evt.preventDefault();
+  evt.submitter.textContent = 'Сохранение...';
   changeAvatar(popupAvatarLink.value)
     .then((data) => {
       avatarImage.setAttribute('src', data.avatar);
-      evt.submitter.textContent = 'Сохранение...';
     })
     .then(closePopup(popupAvatar))
     .catch((err) => {

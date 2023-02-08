@@ -1,6 +1,6 @@
 import { openPicture } from './modal.js';
 import { deleteCard, getCards, putLike, deleteLike } from './api.js';
-import { userId, renderLikes } from './index.js';
+import { userId, renderLikes, isLiked } from './index.js';
 /*Задаю переменные*/
 const cardTemplate = document.querySelector('.elements');
 
@@ -22,7 +22,7 @@ elementTemplate - шаблон карточки без заполненных д
 с готовой HTML-разметкой.
 element - сама карточка.*/
 
-function createCard (image, title, id, ownerId) {
+function createCard (image, title, id, ownerId, massive) {
   /*Клонирование шаблона*/
   const elementTemplate = document.querySelector('#element-template').content;
   const element = elementTemplate.querySelector('.element').cloneNode(true);
@@ -31,24 +31,29 @@ function createCard (image, title, id, ownerId) {
   deleteButton.setAttribute('disabled', true);
   const likeButton = element.querySelector('.element__like-button');
   const likesCounter = element.querySelector('.element__like-counter');
+  renderLikes(likesCounter, massive);
+  if (isLiked(massive)) {
+    likeButton.classList.add('element__like-button_active');
+  } else {
+    likeButton.classList.remove('element__like-button_active');
+  }
 
   cardImage.setAttribute('src', image);
   cardImage.setAttribute('alt', title);
   element.querySelector('.element__title').textContent = title;
 
-  likeButton.addEventListener('click', function (evt) {
-    getCards().then((data) => {
-      let cardLikes = data.find(card => card._id === id).likes;
-      return cardLikes.find(like => like._id === userId);
-    }).then((res) => {
-      if (res === undefined) {
-        putLike(id).then(renderLikes(id, likesCounter, likeButton));
-        console.log('like added');
-      } else {
-        deleteLike(id).then(renderLikes(id, likesCounter, likeButton));
-        console.log('like deleted');
-      }
-    })
+  likeButton.addEventListener('click', function () {
+    if (likeButton.classList.contains('element__like-button_active')) {
+      deleteLike(id)
+        .then(() => {likeButton.classList.remove('element__like-button_active');})
+        .then(() => {likesCounter.textContent = (Number(likesCounter.textContent) - 1);})
+        .catch((err) => {console.log(err);})
+    } else {
+      putLike(id)
+        .then(() => {likeButton.classList.add('element__like-button_active');})
+        .then(() => {likesCounter.textContent = (Number(likesCounter.textContent) + 1);})
+        .catch((err) => {console.log(err);})
+    }
     
   });
 
@@ -56,12 +61,15 @@ function createCard (image, title, id, ownerId) {
     deleteButton.classList.add('element__delete-button_active');
     deleteButton.removeAttribute('disabled', true);
     deleteButton.addEventListener('click', function (evt) {
-      evt.target.closest('.element').remove();
-      deleteCard(id);
+      deleteCard(id)
+        .then(() => {
+          evt.target.closest('.element').remove();
+        })
+        .catch((err) => {
+          console.log(err);
+        })
     });
   };
-
-  renderLikes(id, likesCounter, likeButton);
 
     /*Разворачивание картинки.*/
     cardImage.addEventListener('click', function () {
@@ -71,8 +79,8 @@ function createCard (image, title, id, ownerId) {
 }
 
 /*Функции добавления новых карточек.*/
-function prependNewElement(image, title, id, ownerId) {
-  const element = createCard(image, title, id, ownerId);
+function prependNewElement(image, title, id, ownerId, massive) {
+  const element = createCard(image, title, id, ownerId, massive);
   cardTemplate.prepend(element);
 }
 
