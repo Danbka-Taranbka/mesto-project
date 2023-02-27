@@ -1,4 +1,4 @@
-import { openPicture } from './modal.js';
+import { PopupWithImage } from './modal.js';
 import { deleteCard, getCards, putLike, deleteLike } from './api.js';
 import { userId, renderLikes, isLiked } from './index.js';
 /*Задаю переменные*/
@@ -73,7 +73,8 @@ function createCard (image, title, id, ownerId, massive) {
 
     /*Разворачивание картинки.*/
     cardImage.addEventListener('click', function () {
-    openPicture(image, title);
+      const ImagePopup = new PopupWithImage('.image-popup');
+      ImagePopup.open(image, title);
   });
   return element;
 }

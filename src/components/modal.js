@@ -1,57 +1,51 @@
-/*Открытие любого popup.*/
-function openPopup(popup) {
-  popup.classList.add('popup_opened');
-  document.addEventListener('keydown', escapePopup);
-  popup.addEventListener('mousedown', closeOverlay)
-}
+export class Popup {
+  _popup;
+  _closeButton;
 
-/*ЗАКРЫТИЕ POPUP*/
-function closePopup (popup) {
-  popup.removeEventListener('mousedown', closeOverlay)
-  document.removeEventListener('keydown', escapePopup);
-  popup.classList.remove('popup_opened');
-}
-
-/*Закрытие нажатием на кнопку*/
-const closeButtons = document.querySelectorAll('.popup__close-button');
-
-closeButtons.forEach((button) => {
-  const popup = button.closest('.popup');
-  button.addEventListener('click', () => closePopup(popup));
-});
-
-/*Закрытие нажатием на escape*/
-function escapePopup(evt) {
-  if (evt.key === 'Escape') {
-    const openedPopup = document.querySelector('.popup_opened');
-    closePopup(openedPopup);
-  };
-};
-
-/*Закрытие нажатием на оверлей*/
-function closeOverlay (evt) {
-    if (evt.target.classList.contains('popup')) {
-      closePopup(evt.target);
-    }
+  constructor(popupElement) {
+    this._popup = document.querySelector(popupElement);
   }
 
+  open() {
+    this._popup.classList.add('popup_opened');
+    document.addEventListener("keydown", this._handleEscClose);
+  }
 
-/*ЗАКРЫТИЕ POPUP*/
+  close() {
+    this._popup.classList.remove("popup_opened");
+    document.removeEventListener("keydown", this._handleEscClose);
+  }
 
-/*Задаю переменные, относящиеся к imagePopup*/
-const imagePopup = document.querySelector('.image-popup');
-/*const imagePopupCloseButton = imagePopup.querySelector('.popup__close-button');*/
-const imagePopupPicture = imagePopup.querySelector('.image-popup__image');
-const imagePopupTitle = imagePopup.querySelector('.image-popup__title');
+  setEventListeners() {
+    
+    this._popup.addEventListener("mousedown", function (evt) {
+      if (evt.target === evt.currentTarget) {
+        this.close();
+      }
+    });
+  }
 
-/*Функция открытия картинки*/
-function openPicture (picture, heading) {
-  openPopup(imagePopup);
-  imagePopupTitle.textContent = heading;
-  imagePopupPicture.setAttribute('src', picture);
-  imagePopupPicture.setAttribute('alt', heading);
+  _handleEscClose(evt) {
+    if (evt.key === "Escape") {
+      this.close();
+    }
+  }
 }
 
-
-
-export { openPopup, closePopup, openPicture };
+export class PopupWithImage extends Popup {
+  constructor (popupElement) {
+    super(popupElement);
+    this._image = document.querySelector(".image-popup__image");
+    this._caption = document.querySelector(".image-popup__title");
+  }
+  
+  open(link, name) {
+    super.open();
+    /*Подстановку актуальных данных наверняка следует выполнить по-другому
+    Писал код, основываясь на своём проекте!*/
+      this._image.setAttribute("src", link);
+      this._image.setAttribute("alt", name);
+      this._caption.textContent = name;
+      
+  }
+}

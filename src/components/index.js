@@ -4,7 +4,7 @@ import { enableValidation } from './validate.js';
 
 import { popupCardForm, addButton, popupCard, prependNewElement} from './card.js';
 
-import { openPopup, closePopup } from './modal.js';
+
 
 import { editProfileInfo, getCards, addCard, changeAvatar, getAvatar, getPromise } from './api.js';
 
