@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/KovOlga/mesto-project.git"
+    "url": "git+https://github.com/Danbka-Taranbka/mesto-project.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/KovOlga/mesto-project/issues"
+    "url": "https://github.com/Danbka-Taranbka/mesto-project/issues"
   },
-  "homepage": "https://github.com/KovOlga/mesto-project#readme",
+  "homepage": "https://github.com/Danbka-Taranbka/mesto-project#readme",
   "devDependencies": {
     "@babel/core": "^7.20.12",
     "@babel/preset-env": "^7.20.2",
