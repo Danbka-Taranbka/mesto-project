@@ -1,99 +1,87 @@
-import { serverConfig } from './utils.js'
-
-/*Спасибо за понятные комментарии!*/
-
-const checkStatus = (res) => {
-  if (res.ok) {
-    return res.json();
-  } else {
-    return res
-      .json()
-      .then((err) => (API_ERROR_MESSAGE = err.message))
-      .then(() =>
-        Promise.reject({
-          status: res.status,
-          statusText: res.statusText,
-        }),
-      );
+export default class Api {
+  constructor({ baseUrl, headers }) {
+    this.baseUrl = baseUrl;
+    this.headers = headers;
   }
-};
 
-export function getPromise() {
-  return Promise.all([getProfileInfo(), getCards()]);
-}
+  getResponse(res) {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Ошибка: ${res.status}`);
+  }
 
-export function getProfileInfo() {
-  return fetch(`${serverConfig.baseUrl}/users/me`, {
-    method: 'GET',
-    headers: serverConfig.headers,
-    }).then(checkStatus)
-}
+  getUserData() {
+    return fetch(`${this.baseUrl}/users/me`, {
+      headers: this.headers,
+    }).then(this.getResponse);
+  }
 
-export function editProfileInfo(name, profession) {
-  return fetch(`${serverConfig.baseUrl}/users/me`, {
-    method: 'PATCH',
-    headers: serverConfig.headers,
+  patchProfile(newName, newAbout) {
+    return fetch(`${this.baseUrl}/users/me`, {
+      method: "PATCH",
+      headers: this.headers,
       body: JSON.stringify({
-        name: name,
-        about: profession
-      })
-    }).then(checkStatus)
-}
-
-export function getCards() {
-  return fetch(`${serverConfig.baseUrl}/cards`, {
-    method: 'GET',
-    headers: serverConfig.headers,
-    }).then(checkStatus);
-};
-
-export function addCard(name, link) {
-  return fetch(`${serverConfig.baseUrl}/cards`, {
-    method: 'POST',
-    headers: serverConfig.headers,
-      body: JSON.stringify({
-        name: name,
-        link: link
-      })
-    }).then(checkStatus)
-}
-
-export function deleteCard(cardId) {
-  return fetch(`${serverConfig.baseUrl}/cards/${cardId}`, {
-    method: 'DELETE',
-    headers: serverConfig.headers,
-  }).then(checkStatus)
-
-}
-
-export function changeAvatar(avatar) {
-  return fetch(`${serverConfig.baseUrl}/users/me/avatar`, {
-    method: 'PATCH',
-    headers: serverConfig.headers,
-      body: JSON.stringify({
-        avatar,
+        name: newName,
+        about: newAbout,
       }),
-    }).then(checkStatus)
+    }).then(this.getResponse);
+  }
+
+  patchAvatar(newAvatar) {
+    return fetch(`${this.baseUrl}/users/me/avatar`, {
+      method: "PATCH",
+      headers: this.headers,
+      body: JSON.stringify({
+        avatar: newAvatar,
+      }),
+    }).then(this.getResponse);
+  }
+
+  getCards() {
+    return fetch(`${this.baseUrl}/cards`, {
+      headers: this.headers,
+    }).then(this.getResponse);
+  }
+
+  postCard(newName, newLink) {
+    return fetch(`${this.baseUrl}/cards`, {
+      method: "POST",
+      headers: this.headers,
+      body: JSON.stringify({
+        name: newName,
+        link: newLink,
+      }),
+    }).then(this.getResponse);
+  }
+
+  deleteCard(cardId) {
+    return fetch(`${this.baseUrl}/cards/${cardId}`, {
+      method: "DELETE",
+      headers: this.headers,
+      body: JSON.stringify({
+        _id: cardId,
+      }),
+    }).then(this.getResponse);
+  }
+
+  putLike(cardId) {
+    return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
+      method: "PUT",
+      headers: this.headers,
+      body: JSON.stringify({
+        _id: cardId,
+      }),
+    }).then(this.getResponse);
+  }
+
+  deleteLike(cardId) {
+    return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
+      method: "DELETE",
+      headers: this.headers,
+      body: JSON.stringify({
+        _id: cardId,
+      }),
+    }).then(this.getResponse);
+  }
 }
-
-export function getAvatar() {
-  return fetch(`${serverConfig.baseUrl}/users/me`, {
-    method: 'GET',
-    headers: serverConfig.headers,
-    }).then(checkStatus)
-}
-
-export function putLike(cardId) {
-  return fetch(`${serverConfig.baseUrl}/cards/likes/${cardId}`, {
-    method: 'PUT',
-    headers: serverConfig.headers,
-  }).then(checkStatus)
-}
-
-
-export function deleteLike(cardId) {
-  return fetch(`${serverConfig.baseUrl}/cards/likes/${cardId}`, {
-    method: 'DELETE',
-    headers: serverConfig.headers,
-  }).then(checkStatus)
-} 

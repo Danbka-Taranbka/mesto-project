@@ -1,159 +1,211 @@
-import { configuration } from './utils.js';
+import "../pages/index.css";
+import Card from "./Card.js";
+import PopupWithImage from "./PopupWithImage.js";
+import PopupWithForm from "./PopupWithForm.js";
+import PopupAgreement from "./PopupAgreement.js";
+import Section from "./Section.js";
+import UserInfo from "./UserInfo.js";
+import FormValidator from "./FormValidator.js";
+import Api from "./Api.js";
+import { showPreloader, hidePreloader } from "../utils/utils.js";
+import {
+  popupImage,
+  formProfile,
+  formPlace,
+  popupProfile,
+  profileName,
+  popupAgreeDelete,
+  profileAbout,
+} from "../utils/data.js";
 
-import { enableValidation } from './validate.js';
+//аватар
+const avatar = document.querySelector(".profile__avatar");
+const btnAvatarEdit = document.querySelector(".profile__avatar-container");
+const popupEditAvatar = document.querySelector(".popup_edit-avatar");
+const formAvatar = document.forms.avatar;
+const btnSubmitAvatar = formAvatar.elements.submitAvatar;
+//профайл
+const btnEditProfile = document.querySelector(".profile__edit-button");
+const btnSubmitProfile = formProfile.elements.submitProfile;
+//новая карточка
+const btnAddCard = document.querySelector(".profile__add-button");
+const popupNewCard = document.querySelector(".popup_new-place");
+const btnSubmitPlace = formPlace.elements.submitPlace;
 
-import { popupCardForm, addButton, popupCard, prependNewElement} from './card.js';
+let currentUserId;
 
-
-
-import { editProfileInfo, getCards, addCard, changeAvatar, getAvatar, getPromise } from './api.js';
-
-import '../pages/index.css';
-
-export let userId;
-
-const popupCardPlaceName = popupCardForm.querySelector('.popup__item_place-name');
-const popupCardImage = popupCardForm.querySelector('.popup__item_image');
-
-addButton.addEventListener('click', function () {
-  openPopup(popupCard);
+document.addEventListener("DOMContentLoaded", () => {
+  popupProfile.classList.add("popupTransitions");
+  popupNewCard.classList.add("popupTransitions");
+  popupImage.classList.add("popupTransitions");
+  popupEditAvatar.classList.add("popupTransitions");
+  popupAgreeDelete.classList.add("popupTransitions");
 });
 
-popupCardForm.addEventListener('submit', function (evt) {
-    /*Отмена стандартного поведения с целью отключения перезагрузки страницы.*/
-  evt.preventDefault();
-  evt.submitter.textContent = 'Сохранение...';
-  addCard(popupCardPlaceName.value, popupCardImage.value)
-    .then((res) => {
-      prependNewElement(res.link, res.name,  res._id, res.owner._id, res);
-    })
-    .then(closePopup(popupCard))
-    .catch((err) => {
-      console.log(err);
-    }).finally(() => {
-      evt.target.reset();
-      evt.submitter.setAttribute('disabled', true);
-      evt.submitter.classList.add('popup__submit-button_inactive');
-      evt.submitter.textContent = 'Сохранить';
-    })
+const api = new Api({
+  baseUrl: "https://nomoreparties.co/v1/plus-cohort-19",
+  headers: {
+    authorization: "858c7cb6-e0c3-4a29-bdeb-66efeccdb118",
+    "Content-Type": "application/json",
+  },
 });
 
-/*Кнопка редактирования профиля (имя и профессия).*/
-const profileEditButton = document.querySelector('.profile__edit-button');
+const validationConfig = {
+  formSelector: ".form",
+  inputSelector: ".form__input",
+  submitButtonSelector: ".form__submit-btn",
+  inactiveButtonClass: "form__submit-btn_disabled",
+  inputErrorClass: "form__input_type_error",
+  errorClass: "form__input-error-message",
+  errorVisibleClass: "form__input-error-message_active",
+};
 
-export const profileName = document.querySelector('.profile__name');
-export const profileProfession = document.querySelector('.profile__profession');
+const formProfileValidator = new FormValidator(validationConfig, formProfile);
+formProfileValidator.enableValidation();
 
-/*Переменные, содержащие ключевое слово popupProfile 
-используются для работы с данными формы.*/
-const popupProfile = document.querySelector('#popup-profile');
-const popupProfileForm = popupProfile.querySelector('.popup__content .popup__form');
-const popupProfileName = popupProfileForm.querySelector('.popup__item_name');
-const popupProfileProfession = popupProfileForm.querySelector('.popup__item_profession');
+const formPlaceValidator = new FormValidator(validationConfig, formPlace);
+formPlaceValidator.enableValidation();
 
-/*Открытие и закрытие popup, отвечающего за редактирования профиля.
-Закрытие без сохранения изменений.*/
-profileEditButton.addEventListener('click', function () {
-  openPopup(popupProfile);
-  popupProfileName.value = profileName.textContent;
-  popupProfileProfession.value = profileProfession.textContent;
+const formAvatarValidator = new FormValidator(validationConfig, formAvatar);
+formAvatarValidator.enableValidation();
+
+const user = new UserInfo({
+  profileName: profileName,
+  profileAbout: profileAbout,
+  avatar: avatar,
 });
 
+const avatarPopup = new PopupWithForm(".popup_edit-avatar", {
+  handleSubmitForm: ({ avatar }) => {
+    return api.patchAvatar(avatar).then((res) => {
+      user.setUserInfo(res);
+    });
+  },
+  showLoader: () => {
+    showPreloader(btnSubmitAvatar);
+  },
+  hideLoader: () => {
+    hidePreloader(btnSubmitAvatar);
+  },
+});
+avatarPopup.setEventListeners();
 
-/*Реализация функции редактирования профиля*/
-function saveProfileChanges(evt) {
-  evt.preventDefault();/*Отмена стандартного поведения с целью отключения перезагрузки страницы.*/
-  evt.submitter.textContent = 'Сохранение...';
-  editProfileInfo(popupProfileName.value, popupProfileProfession.value)
-    .then(() => {
-      profileName.textContent = popupProfileName.value;
-      profileProfession.textContent = popupProfileProfession.value;
-    })
-    .then(() => {
-      closePopup(popupProfile);
-    })
-    .catch((err) => {
-      console.log(err);
-    }).finally(() => {
-      evt.target.reset();
-      evt.submitter.setAttribute('disabled', true);
-      evt.submitter.classList.add('popup__submit-button_inactive');
-      evt.submitter.textContent = 'Сохранить';
-    })
+const profilePopup = new PopupWithForm(".popup_profile", {
+  handleSubmitForm: ({ name, about }) => {
+    return api.patchProfile(name, about).then((res) => {
+      user.setUserInfo(res);
+    });
+  },
+  showLoader: () => {
+    showPreloader(btnSubmitProfile);
+  },
+  hideLoader: () => {
+    hidePreloader(btnSubmitProfile);
+  },
+});
+profilePopup.setEventListeners();
+
+const cardPopup = new PopupWithForm(".popup_new-place", {
+  handleSubmitForm: ({ place, link }) => {
+    return api.postCard(place, link).then((newCardData) => {
+      cardList.renderNewItem(newCardData);
+    });
+  },
+  showLoader: () => {
+    showPreloader(btnSubmitPlace);
+  },
+  hideLoader: () => {
+    hidePreloader(btnSubmitPlace);
+  },
+});
+cardPopup.setEventListeners();
+
+const imagePopup = new PopupWithImage({
+  popupSelector: ".popup_image-window",
+  popupImagePictureSelector: ".popup__image",
+  popupImageCaptionSelector: ".popup__caption",
+});
+imagePopup.setEventListeners();
+
+const agreementPopup = new PopupAgreement({
+  popupSelector: ".popup_agree-delete",
+  btnAgreeDeleteSelector: ".popup__btn-agree",
+  handleCardDelete: (binBtnTarget, cardId) => {
+    return api
+      .deleteCard(cardId)
+      .then(() => {
+        agreementPopup.close();
+        binBtnTarget.closest(".photo-elements__item").remove();
+      })
+      .catch((err) => {
+        console.log(`Ошибка при удалении карточки: ${err.message}`);
+      });
+  },
+});
+agreementPopup.setEventListeners();
+
+function setUserId(userId) {
+  currentUserId = userId;
 }
 
-popupProfileForm.addEventListener('submit', saveProfileChanges);
-/*Реализация функции редактирования профиля*/
-
-
-getPromise()
-  .then(getAvatar()
-    .then((data) => {
-      updateUserInfo(data);
-    })
-    .catch((err) => {
-      console.log(err);
-    }))
-  .then(() => {
-    getCards()
-      .then((data) => {
-        data.reverse().forEach((element) => {
-          prependNewElement(element.link, element.name, element._id, element.owner._id, element);
-          })
-        })
-  }).catch((err) => {
-  console.log(err);
+const cardList = new Section({
+  items: [],
+  renderer: (item) => {
+    const newCard = new Card(item, "#photo-cards-template", currentUserId, {
+      putLike: (cardId) => {
+        return api.putLike(cardId);
+      },
+      deleteLike: (cardId) => {
+        return api.deleteLike(cardId);
+      },
+      handleCardDelete: (binBtnTarget, cardId) => {
+        agreementPopup.open(binBtnTarget, cardId);
+      },
+      handleImageClick: (name, link) => {
+        imagePopup.open(name, link);
+      },
+    });
+    const cardElement = newCard.generate();
+    cardList.addItem(cardElement);
+  },
+  containerSelector: ".photo-elements__list",
 });
 
-export function renderLikes(counter, massive) {
-  return counter.textContent = massive.likes.length;
-}
-/*Спасибо за понятные комментарии!*/
-export function isLiked(massive) {
-  const isLiked = massive.likes.find(like => like._id === userId);
-  if (isLiked === undefined) {
-    return false;
-  } else {
-    return true;
-  }
-}
+const renderInitialData = () => {
+  Promise.all([api.getUserData(), api.getCards()])
+    .then(([userData, cardsArr]) => {
+      setUserId(userData._id);
+      user.setUserInfo(userData);
+      cardList.renderItems(cardsArr);
+    })
+    .catch((err) => {
+      console.log(
+        `Ошибка при загрузке данных пользователя с сервера: ${err.message}`
+      );
+    });
+};
+renderInitialData();
 
-function updateUserInfo(user) {
-  profileProfession.textContent = user.about;
-  profileName.textContent = user.name;
-  avatarImage.src = user.avatar;
-
-  userId = user._id;
-}
-
-
-
-
-const popupAvatar = document.querySelector('#popup-avatar')
-const popupAvatarLink = document.querySelector('.popup__item_avatar');
-export const avatarImage = document.querySelector('.profile__avatar');
-const avatarForm = popupAvatar.querySelector('.popup__form');
-
-avatarImage.addEventListener('click', function () {
-  openPopup(popupAvatar);
+//аватар
+btnAvatarEdit.addEventListener("click", () => {
+  formAvatar.reset();
+  formAvatarValidator.resetErrorOnReOpen();
+  formAvatarValidator.disableSubmitBtnOnOpen();
+  avatarPopup.open();
 });
 
-avatarForm.addEventListener('submit', function (evt) {
-  evt.preventDefault();
-  evt.submitter.textContent = 'Сохранение...';
-  changeAvatar(popupAvatarLink.value)
-    .then((data) => {
-      avatarImage.setAttribute('src', data.avatar);
-    })
-    .then(closePopup(popupAvatar))
-    .catch((err) => {
-      console.log(err);
-    }).finally(() => {
-      evt.target.reset();
-      evt.submitter.setAttribute('disabled', true);
-      evt.submitter.classList.add('popup__submit-button_inactive');
-      evt.submitter.textContent = 'Сохранить';
-    })
-})
+//профайл
+btnEditProfile.addEventListener("click", () => {
+  formProfileValidator.resetErrorOnReOpen();
+  formProfileValidator.disableSubmitBtnOnOpen();
+  profilePopup.setInputValues(user.getUserInfo());
+  profilePopup.open();
+});
 
-enableValidation(configuration);
+//новая карточка
+btnAddCard.addEventListener("click", () => {
+  formPlace.reset();
+  formPlaceValidator.resetErrorOnReOpen();
+  formPlaceValidator.disableSubmitBtnOnOpen();
+  cardPopup.open();
+});

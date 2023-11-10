@@ -1,18 +1,23 @@
 .profile__info {
-  margin-left: 30px;
-  max-width: 336px;
-
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: flex-end;
+    width: 336px;
+    display: grid;
+    column-gap: 19px;
+    row-gap: 7px;
+    grid-template-columns: 293px 24px;
+    grid-template-rows: repeat(2, min-content);
+    grid-template-areas:
+        'name edit-button'
+        'about about';
 }
 
-@media screen and (max-width: 475px) {
-  .profile__info{
-    margin: 0;
-    margin-top: 22.25px;
-    justify-content: center;
-    max-width: 282px;
-  }
+@media (max-width: 768px) {
+    .profile__info {
+        width: 100%;
+        column-gap: 10px;
+        grid-template-columns: 36px 189px 37px;
+        grid-template-rows: repeat(2, min-content);
+        grid-template-areas:
+            '. name edit-button'
+            'about about about';
+    }
 }
