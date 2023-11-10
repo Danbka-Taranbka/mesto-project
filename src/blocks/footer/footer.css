@@ -1,18 +1,13 @@
 .footer {
-  width: 85%;
-  max-width: 880px;
-  min-width: 282px;
-
-  margin-top: 66px;
-  margin-bottom: 60px;
-
   display: flex;
-  justify-items: flex-start;
+  flex-direction: row;
+  justify-content: flex-start;
+  max-width: 880px;
+  margin: 0 auto;
 }
 
-@media screen and (max-width: 320px) {
+@media (max-width: 320px) {
   .footer {
-    margin-top: 48px;
-    margin-bottom: 36px;
+    max-width: 282px;
   }
 }

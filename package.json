@@ -1,7 +1,7 @@
 {
-  "name": "mesto_project",
+  "name": "3.mesto-project",
   "version": "1.0.0",
-  "description": "Проект Mesto",
+  "description": "* Интро\r * GitHub Pages\r * Технологии\r * Секции\r * Figma",
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode production",
@@ -13,7 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/Danbka-Taranbka/mesto-project.git"
   },
-  "author": "Danbka-Taranbka",
+  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Danbka-Taranbka/mesto-project/issues"
@@ -36,6 +36,6 @@
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
-    "core-js": "^3.27.2"
+    "core-js": "^3.27.1"
   }
 }

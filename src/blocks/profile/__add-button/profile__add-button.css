@@ -1,46 +1,27 @@
 .profile__add-button {
-  margin: 0;
-  padding: 0;
-
-  width: 150px;
-  height: 50px;
-  
-  background-image: url(../../../images/add-button.svg);
- 
-  background-position: center;
-  background-repeat: no-repeat;
-  background-color: transparent;
-  background-size: 22px;
-  
-  background-color: black;
-  
-  border: solid 2px white;
-  border-radius: 2px;
-
-  cursor: pointer;
+    background: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    box-sizing: border-box;
+    border: 2px solid #FFFFFF;
+    border-radius: 2px;
+    width: 150px;
+    height: 50px;
+    align-self: center;
+    background-image: url('../../../images/Vector-add-button.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: opacity .4s linear;
+    /* aspect-ratio: 3/1; */
 }
 
 .profile__add-button:hover {
-  opacity: 0.6;
+    opacity: .6;
 }
 
-@media screen and (max-width: 800px) {
-  .profile__add-button {
-    background-size: 16px;
-    width: 100px;
-  }
-}
-
-@media screen and (max-width: 575px) {
-  .profile__add-button{
-    width: 282px;
-    margin-top: 30px;
-    background-size: 16px;
-  }
-}
-
-@media screen and (max-width: 320px) {
-  .profile__add-button {
-    width: 282px;
-  }
+@media (max-width: 768px) {
+    .profile__add-button {
+        width: 100%;
+    }
 }
