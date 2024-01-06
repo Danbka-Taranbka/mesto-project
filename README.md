@@ -1,7 +1,7 @@
 # Проект Mesto
 
 Данный проект является практическкой работой, нацеленной на применение изученных навыков.
-<p>Посмотреть проект можно по <a href="https://danbka-taranbka.github.io/mesto-project/index.html ">ссылке</a>.</p>
+<p>Посмотреть проект можно по <a href="https://danbka-taranbka.github.io/mesto-project/index.html">ссылке</a>.</p>
 Статус: завершён.
 
 ## Стек
